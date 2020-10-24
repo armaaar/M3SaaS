@@ -18,3 +18,17 @@ function setMigrationRoute($router) {
         });
     }
 }
+
+function require_db_files($db_directory_path) {
+    foreach ( glob($db_directory_path."/tables/*.table.php") as $file ) {
+        require_once $file;
+    }
+
+    foreach ( glob($db_directory_path."/views/*.view.php") as $file ) {
+        require_once $file;
+    }
+
+    foreach ( glob($db_directory_path."/seeds/*.seed.php") as $file ) {
+        require_once $file;
+    }
+}

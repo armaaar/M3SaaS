@@ -5,7 +5,7 @@ class Modules_Seed extends Stalker_Seed {
         return [
             [
                 "id" => 1,
-                "name" => "test_module",
+                "name" => "test",
             ]
         ];
     }
