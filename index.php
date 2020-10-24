@@ -15,12 +15,11 @@ require_once "./settings/ini.php";
 date_default_timezone_set(TIME_ZONE);
 
 // Import DBStalker
-foreach ( glob("./core/dbstalker/*.core.php") as $file ) {
-    require_once $file;
-}
+require_once './core/dbstalker/dbstalker.php';
 
 // Import Router
 require_once "./core/miniRouter.php";
+$router = new miniRouter();
 
 // SaaS logic
 
