@@ -9,6 +9,10 @@ class Tenants extends Stalker_Table
     }
 
     public function modules() {
-        return $this->has_many_through("Modules", "Subscriptions", "module_id", "tenant_id");
+        return array_map(function ($subscription) {
+            $module = $subscription->module;
+            $module->version = $subscription->version;
+            return $module;
+        }, $this->has_many('Subscriptions', 'tenant_id'));
     }
 }

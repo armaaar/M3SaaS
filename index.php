@@ -42,6 +42,13 @@ $router = new miniRouter();
 // SaaS logic
 $router->group(APP_SUB_DIRECTORY, function($router){
     setMigrationRoute($router);
+    $router->group('/{:i}', function($router, $tenant_id) {
+        $tenant = Tenants::get($tenant_id);
+        if ($tenant) {
+            // fetch tanent modules before changing db settings
+            $modules = $tenant->modules;
+        }
+    });
 });
 $router->fallback(function() {
     http_response_code(404);

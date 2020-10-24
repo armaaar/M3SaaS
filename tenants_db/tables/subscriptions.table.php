@@ -6,7 +6,7 @@ class Subscriptions extends Stalker_Table
         return Stalker_Schema::build( function ($table) {
             $table->id("tenant_id")->index();
             $table->id("module_id")->index();
-            $table->int("version", 2)->def(null);
+            $table->int("version", 2)->def(1);
         });
     }
 
