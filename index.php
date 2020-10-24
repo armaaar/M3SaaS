@@ -16,6 +16,7 @@ date_default_timezone_set(TIME_ZONE);
 
 // Import DBStalker
 require_once './core/dbstalker/dbstalker.php';
+Stalker_Configuration::set_stalker_configuration($configuration->databases->tenants);
 
 // Import Router
 require_once "./core/miniRouter.php";
