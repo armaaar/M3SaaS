@@ -80,3 +80,12 @@ In order to migrate changes in tables' structure and seeds. you should make sure
 - To force seed main seeds, send the request to `/migrate/force`
 - To seed temporary seeds, send the request to `/migrate/seed`
 - To remove temporary seeds, send the request to `/migrate/deseed`
+
+Note: renaming columns or tables might result DROPPING the column or table entirely. so be careful!
+
+## Future Features
+Bellow is a list of features or tasks to do in the future:
+- Manage modules dependancies
+
+## License
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
