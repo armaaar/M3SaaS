@@ -15,6 +15,7 @@ function setMigrationRoute($router) {
             } elseif($seed == "deseed") {
                 Stalker_Seeder::delete_temporary_seeds();
             }
+            http_response_code(204);
         });
     }
 }

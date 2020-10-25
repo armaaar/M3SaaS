@@ -52,9 +52,12 @@ $router->group(APP_SUB_DIRECTORY, function($router) use($configuration) {
                 require_db_files("./modules/{$module->name}/v{$module->version}/db");
 
                 // set module route
-                $router->group("/{$module->name}/v{$module->version}", function($router) use($module) {
-                    include_once "./modules/{$module->name}/v{$module->version}/{$module->name}.module.php";
-                });
+                $router->group("/{$module->name}/v({$module->version}(?!\d)(?:\.\d+)?)",
+                    function($router, $tenant_id, $version_number) use($module) {
+                        $version_number = floatval($version_number);
+                        include_once "./modules/{$module->name}/v{$module->version}/{$module->name}.module.php";
+                    }
+                );
             }
 
             // Add migration route for tanent
