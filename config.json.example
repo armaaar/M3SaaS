@@ -1,5 +1,4 @@
 {
-    "secret_key": "",
     "sub_directory": "",
     "databases": {
         "tenants": {
