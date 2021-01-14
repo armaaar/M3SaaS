@@ -34,3 +34,8 @@ function require_db_files($db_directory_path) {
         require_once $file;
     }
 }
+
+function salt_db_password($password, $salt = "") {
+    // using MD5 because MYSQL max password length is 32 characters
+    return md5($salt . $password . $salt);
+}
