@@ -1,7 +1,12 @@
 <?php
 
+if (!isset($_ENV['CONFIG_FILE'])) {
+    trigger_error("ERROR: Config file not defined", E_USER_WARNING);
+    die();
+}
+
 // load config.json
-$configuration = json_decode(file_get_contents("./config.json"));
+$configuration = json_decode(file_get_contents($_ENV['CONFIG_FILE']));
 if(json_last_error()!==JSON_ERROR_NONE) {
     error_log(json_last_error());
     die();

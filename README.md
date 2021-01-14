@@ -2,13 +2,18 @@
 
 A modular approach to create a multi-tanent API as a service with multiple databases. Based on [DBStalker](https://github.com/armaaar/dbstalker) and [miniRouter](https://github.com/armaaar/miniRouter).
 
+## Setup
+
+To run the app, you need to install [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/install/). After you are done you can start the app using `docker-compose up`
+
 ## Configure Databases
 
-- Create a new `config.json` with the same structure as [`config.json.example`](https://github.com/armaaar/M3SaaS/blob/master/config.json.example)
-- Create at master database to store the tenants and modules information. Use [DBStalker configuration options](https://github.com/armaaar/dbstalker#configuration) to store the connection options under `tenants` in `config.json`.
-- Optional: add a salt for databases passwords: `"dbSalt": "yourUniqueSalt"` in `config.json`.
+- Create a new `secrets/db_root_password.secret` file with only the default db root password in it.
+- Create a new `secrets/config.json.secret` with the same structure as `secrets/config.json.secret.example`.
+- Use [DBStalker configuration options](https://github.com/armaaar/dbstalker#configuration) to store the connection options under `tenants` in `config.json.secret`.
+- Optional: add a salt for databases passwords: `"dbSalt": "yourUniqueSalt"` in `config.json.secret`.
 
-See [`config.json.example`](https://github.com/armaaar/M3SaaS/blob/master/config.json.example) for example.
+See `secrets/config.json.secret.example` for example.
 
 ## Register tanents in database
 
