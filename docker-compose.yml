@@ -37,6 +37,12 @@ services:
     ports:
       - 8080:8080
 
+  hiveMQ:
+    image: hivemq/hivemq-ce:2020.6
+    ports:
+      - 8000:8000
+      - 1883:1883
+
 secrets:
   db_root_password:
     file: ./secrets/db_root_password.secret
