@@ -12,3 +12,6 @@ insert_final_newline = true
 [*.yml]
 indent_size = 2
 tab_width = 2
+
+[*.{secret,secret.example}]
+insert_final_newline = false

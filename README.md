@@ -1,6 +1,6 @@
-# Multi-Tanent Multi-Database Modular Software As A Service
+# Multi-Tenant Multi-Database Modular Software As A Service
 
-A modular approach to create a multi-tanent API as a service with multiple databases. Based on [DBStalker](https://github.com/armaaar/dbstalker) and [miniRouter](https://github.com/armaaar/miniRouter).
+A modular approach to create a multi-tenant API as a service with multiple databases. Based on [DBStalker](https://github.com/armaaar/dbstalker) and [miniRouter](https://github.com/armaaar/miniRouter).
 
 ## Setup
 
@@ -15,18 +15,18 @@ To run the app, you need to install [Docker](https://www.docker.com/get-started)
 
 See `secrets/config.json.secret.example` for example.
 
-## Register tanents in database
+## Register tenants in database
 
-Add tanents' information as [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in [`tanents.seed.php`](https://github.com/armaaar/M3SaaS/blob/master/tenants_db/seeds/tenants.seed.php), each tanent with unique:
+Add tenants' information as [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in [`tenants.seed.php`](https://github.com/armaaar/M3SaaS/blob/master/tenants_db/seeds/tenants.seed.php), each tenant with unique:
 
-- `id`: Will be used to access the tanents API and modules
+- `id`: Will be used to access the tenants API and modules
 - `name`: Will be used as a database name
-- `user`: Will be used as a database username to access the tanent database
+- `user`: Will be used as a database username to access the tenant database
 - `password`: Will be hashed and salted to be used as a password for the database user created
 - `per_day_backups` The maximum number of backups that can be taken per day, default to `1`
 - `max_backups` The maximum number of backups that can be taken, default to `10`
 
-The tanent's APIs will be added under the unique tanent URL: `/{tanent_id}`
+The tenant's APIs will be added under the unique tenant URL: `/{tenant}`
 
 ## Reusable modules
 
@@ -40,7 +40,7 @@ To create a new module with name `unique_module_name`:
 
 - Create a new directory called `unique_module_name` under [`modules`](https://github.com/armaaar/M3SaaS/tree/master/modules) directory
 - Create a new directory for each version of the module. Add directory `v1` in your newly created module directory. More on [module versionning](#modules-versionning) later
-- Create a root module file called `unique_module_name.module.php` inside each version directory. This file will be included for each tanent subscribed to this version of the module
+- Create a root module file called `unique_module_name.module.php` inside each version directory. This file will be included for each tenant subscribed to this version of the module
 
 ### Modules versionning
 
@@ -49,7 +49,7 @@ Modules work ONLY in versions. Versions are used to introduce breaking changes t
 Recommendations while using modules (unless you know what you are doing):
 
 - A new version should ideally be introduced if it's uncompatible with the old version.
-- Tanents should ideally subscribe to 1 version of each module to avoid conflict in database.
+- Tenants should ideally subscribe to 1 version of each module to avoid conflict in database.
 
 #### Create a new version
 
@@ -74,21 +74,21 @@ Although only major version numbers can be created, sub-versions can be accessed
 
 For example: versions `1`, `1.4`, `1.0.1` all access `v1` module and the full version can be accessed through `$version_number` variable.
 
-The module version's APIs will be added under the unique URL: `/{tanent_id}/{unique_module_name}/v{version_number}`
+The module version's APIs will be added under the unique URL: `/{tenant_id}/{unique_module_name}/v{version_number}`
 
 ## Register modules in database
 
 Add modules' information as [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in [`modules.seed.php`](https://github.com/armaaar/M3SaaS/blob/master/tenants_db/seeds/modules.seed.php), each module with unique:
 
-- `id`: Will be used to connect tanents to modules
+- `id`: Will be used to connect tenants to modules
 - `name`: The same name used for the module's directory name in `modules`
 
-## Subscribe tanents to modules
+## Subscribe tenants to modules
 
-For each module a tanent should subscribe to, add a [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in [`subscriptions.seed.php`](https://github.com/armaaar/M3SaaS/blob/master/tenants_db/seeds/subscriptions.seed.php) with:
+For each module a tenant should subscribe to, add a [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in [`subscriptions.seed.php`](https://github.com/armaaar/M3SaaS/blob/master/tenants_db/seeds/subscriptions.seed.php) with:
 
 - `id`: Just a unique identifier required for main seeds, not used
-- `tenant_id`: The id of the tanent that will subscribe to the module
+- `tenant_id`: The id of the tenant that will subscribe to the module
 - `module_id` The id of the module to be subscribed to
 - `version` The major version number of the module that should be used, default to `1`
 
@@ -96,8 +96,8 @@ For each module a tanent should subscribe to, add a [main seeds](https://github.
 
 In order to migrate changes in tables' structure and seeds. you should make sure that `ALLOW_MIGRATION` in [`settings/constants.php`](https://github.com/armaaar/M3SaaS/blob/3258975c8a7ff7ee3e8848bae265e6592f3bc79c/settings/constants.php#L11) is set to `true`
 
-- To migrate the master tanents database, send a get request to: `/migrate`
-- To migrate a tanent database, send a get request to: `/{tanent_id}/migrate`
+- To migrate the master tenants database, send a get request to: `/migrate`
+- To migrate a tenant database, send a get request to: `/{tenant_id}/migrate`
 - To force seed main seeds, send the request to `/migrate/force`
 - To seed temporary seeds, send the request to `/migrate/seed`
 - To remove temporary seeds, send the request to `/migrate/deseed`

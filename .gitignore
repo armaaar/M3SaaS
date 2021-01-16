@@ -1,6 +1,6 @@
 *.sql
 .*/
 
-logs/*.log
+**/logs/*.log
 
 secrets/*.secret

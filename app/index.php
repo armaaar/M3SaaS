@@ -42,13 +42,13 @@ $router->group(APP_SUB_DIRECTORY, function($router) use($configuration) {
     $router->group('/{:i}', function($router, $tenant_id) use($configuration) {
         $tenant = Tenants::get($tenant_id);
         if ($tenant) {
-            // create tanent DB if it doesn't exists
+            // create tenant DB if it doesn't exists
             $is_new_database = $tenant->create_database($configuration->dbSalt);
 
-            // fetch tanent modules before changing db settings
+            // fetch tenant modules before changing db settings
             $modules = $tenant->modules;
 
-            // Switch to tanent database
+            // Switch to tenant database
             Stalker_Registerar::clear_registerar();
             Stalker_Configuration::set_stalker_configuration((object) [
                 "database" => (object) [
@@ -83,7 +83,7 @@ $router->group(APP_SUB_DIRECTORY, function($router) use($configuration) {
                 Stalker_Seeder::seed_main_seeds();
             }
 
-            // Add migration route for tanent
+            // Add migration route for tenant
             setMigrationRoute($router);
         }
     });

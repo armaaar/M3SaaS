@@ -26,7 +26,7 @@ $router->post('/animals', function() {
     update_animal_request($animal);
 });
 
-$router->delete('/animals/{:i}', function($tanent_id, $version_number, $animal_id) {
+$router->delete('/animals/{:i}', function($tenant_id, $version_number, $animal_id) {
     $animal = Test_Animals::get($animal_id);
     if ($animal) {
         $animal->delete();
@@ -37,7 +37,7 @@ $router->delete('/animals/{:i}', function($tanent_id, $version_number, $animal_i
 });
 
 if ($version_number >= '1.1') {
-    $router->put('/animals/{:i}', function($tanent_id, $version_number, $animal_id) {
+    $router->put('/animals/{:i}', function($tenant_id, $version_number, $animal_id) {
         $animal = Test_Animals::get($animal_id);
         if ($animal) {
             update_animal_request($animal);
