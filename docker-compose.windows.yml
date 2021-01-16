@@ -19,7 +19,6 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
-    container_name: php-apache
     ports:
       - 80:80
     volumes:

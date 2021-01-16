@@ -94,13 +94,15 @@ For each module a tenant should subscribe to, add a [main seeds](https://github.
 
 ## Database migration
 
-In order to migrate changes in tables' structure and seeds. you should make sure that `ALLOW_MIGRATION` in [`settings/constants.php`](https://github.com/armaaar/M3SaaS/blob/3258975c8a7ff7ee3e8848bae265e6592f3bc79c/settings/constants.php#L11) is set to `true`
+In order to migrate changes in tables' structure and seeds. You can either:
 
-- To migrate the master tenants database, send a get request to: `/migrate`
-- To migrate a tenant database, send a get request to: `/{tenant_id}/migrate`
-- To force seed main seeds, send the request to `/migrate/force`
-- To seed temporary seeds, send the request to `/migrate/seed`
-- To remove temporary seeds, send the request to `/migrate/deseed`
+- Set `AUTO_MIGRATION` in `settings/constants.php` to `true`
+- Set `AUTO_MIGRATION` in `settings/constants.php` to `false` and migrate manually using the following routes:
+  - To migrate the master tenants database, send a get request to: `/migrate`
+  - To migrate a tenant database, send a get request to: `/{tenant_id}/migrate`
+  - To force seed main seeds, send the request to `/migrate/force`
+  - To seed temporary seeds, send the request to `/migrate/seed`
+  - To remove temporary seeds, send the request to `/migrate/deseed`
 
 Note: renaming columns or tables might result DROPPING the column or table entirely. so be careful!
 

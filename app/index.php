@@ -78,9 +78,9 @@ $router->group(APP_SUB_DIRECTORY, function($router) use($configuration) {
                 );
             }
 
-            if ($is_new_database) {
+            if ($is_new_database && !AUTO_MIGRATION) {
                 Stalker_Migrator::migrate();
-                Stalker_Seeder::seed_main_seeds();
+                Stalker_Seeder::seed_main_seeds(ALWAYS_FORCE_MAIN_SEEDS);
             }
 
             // Add migration route for tenant

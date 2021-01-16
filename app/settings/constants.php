@@ -8,4 +8,5 @@ if (property_exists($configuration, "sub_directory")) {
     define("APP_SUB_DIRECTORY", '');
 }
 
-define("ALLOW_MIGRATION", true);
+define("AUTO_MIGRATION", true);
+define("ALWAYS_FORCE_MAIN_SEEDS", false);

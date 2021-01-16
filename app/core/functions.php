@@ -1,7 +1,10 @@
 <?php
 
 function setMigrationRoute($router) {
-    if (ALLOW_MIGRATION) {
+    if (AUTO_MIGRATION) {
+        Stalker_Migrator::migrate();
+        Stalker_Seeder::seed_main_seeds(ALWAYS_FORCE_MAIN_SEEDS);
+    } else {
         $router->get('/migrate/{:a}?', function($seed=false) {
             Stalker_Migrator::migrate();
             if($seed == "force") {
