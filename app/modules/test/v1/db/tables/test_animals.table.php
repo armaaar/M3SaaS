@@ -8,5 +8,3 @@ class Test_Animals extends Stalker_Table
         });
     }
 }
-
-Stalker_Registerar::register_table('Test_Animals');

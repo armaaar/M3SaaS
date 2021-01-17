@@ -31,14 +31,20 @@ function require_db_files($db_directory_path) {
 
     foreach ( glob($db_directory_path."/tables/*.table.php") as $file ) {
         require_once $file;
+        Stalker_Registerar::register_table(get_file_name($file));
     }
 
     foreach ( glob($db_directory_path."/views/*.view.php") as $file ) {
         require_once $file;
+        Stalker_Registerar::register_view(get_file_name($file));
     }
 }
 
 function salt_db_password($password, $salt = "") {
     // using MD5 because MYSQL max password length is 32 characters
     return md5($salt . $password . $salt);
+}
+
+function get_file_name($path) {
+    return explode('.', end(explode('/', $path)))[0];
 }
