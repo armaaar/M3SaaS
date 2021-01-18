@@ -1,6 +1,4 @@
 <?php
-// CRON_JOBS=true php ./index.php
-
 // include cronjobs methods
 require_once './core/cronjobs/cronjobs.methods.php';
 
