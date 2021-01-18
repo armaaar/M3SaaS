@@ -3,7 +3,6 @@
 chdir(__DIR__);
 
 // initial settings
-require_once "./settings/constants.php";
 require_once "./settings/ini.php";
 
 // set timezone
@@ -21,6 +20,9 @@ if(json_last_error()!==JSON_ERROR_NONE) {
     error_log(json_last_error());
     die();
 }
+
+// define constants
+require_once "./settings/constants.php";
 
 // Import core functions
 require_once './core/functions.php';

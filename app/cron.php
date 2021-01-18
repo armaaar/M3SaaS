@@ -5,7 +5,7 @@ require_once './core/cronjobs/cronjobs.methods.php';
 // Run backup cron job for tenants_db
 register_crobjob('database_backup', function() {
     Stalker_Backup::create_backup();
-}, 1, 'month');
+}, 'month');
 
 // run cron jobs for all tanents
 $tenants = Tenants::fetch();
@@ -37,7 +37,7 @@ if ($tenants) {
         // Add database backup cronjob
         register_crobjob('database_backup', function() {
             Stalker_Backup::create_backup();
-        }, 1, 'month');
+        }, 'month');
 
         // Load modules settings and routes
         foreach ($modules as $module) {
