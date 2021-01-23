@@ -15,7 +15,7 @@ RUN pecl install Mosquitto-alpha \
 # copy app
 COPY . /var/www/html/
 # Add crob job command
-RUN crontab /var/www/html/bin/m3saas_cronjob
+RUN crontab /var/www/html/m3saas_cronjob
 # Expose apache server
 EXPOSE 80
 # Run init shell script on container start
