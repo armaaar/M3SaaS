@@ -5,9 +5,6 @@ chdir(__DIR__);
 // initial settings
 require_once "./settings/ini.php";
 
-// set timezone
-date_default_timezone_set(TIME_ZONE);
-
 // Read configurations
 if (!isset($_ENV['CONFIG_FILE'])) {
     trigger_error("ERROR: Config file not defined", E_USER_WARNING);
@@ -23,6 +20,9 @@ if(json_last_error()!==JSON_ERROR_NONE) {
 
 // define constants
 require_once "./settings/constants.php";
+
+// set timezone
+date_default_timezone_set(TIME_ZONE);
 
 // Import core functions
 require_once './core/functions.php';

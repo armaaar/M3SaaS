@@ -7,7 +7,7 @@ RUN apt-get update \
         cron \
         libmosquitto-dev
 # install apache mods
-RUN a2enmod rewrite && a2enmod headers && a2enmod expires
+RUN a2enmod rewrite && a2enmod headers && a2enmod expires && a2enmod deflate
 # Install php extensions
 RUN docker-php-ext-install pdo pdo_mysql
 RUN pecl install Mosquitto-alpha \
