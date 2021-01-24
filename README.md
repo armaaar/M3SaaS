@@ -17,7 +17,7 @@ See `secrets/config.json.secret.example` for example.
 
 ## Register tenants in database
 
-Add tenants' information as [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in [`tenants.seed.php`](https://github.com/armaaar/M3SaaS/blob/master/tenants_db/seeds/tenants.seed.php), each tenant with unique:
+Add tenants' information as [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in `tenants.seed.php`, each tenant with unique:
 
 - `id`: Will be used to access the tenants API and modules
 - `name`: Will be used as a database name
@@ -106,9 +106,82 @@ In order to migrate changes in tables' structure and seeds. You can either:
 
 Note: renaming columns or tables might result DROPPING the column or table entirely. so be careful!
 
+## MQTT Connection
+
+The app comes bundled with HiveMQ MQTT Broker so the server can push messages to clients and the clients can communicate directly outside the server. If you are new to MQTT, we recomment reading [MQTT Essentials](https://www.hivemq.com/mqtt-essentials/) first.
+
+### Define broker credentials
+
+You can create unique users for your different tanents or applications using [HiveMQ file RBAC extensions](https://www.hivemq.com/extension/file-rbac-extension/). To add a new user, add the username and password to `hive-mq/extensions/hivemq-file-rbac-extension/credentials.xml`, here is an example:
+
+```xml
+<users>
+    <user>
+        <name>app_user</name>
+        <!-- Hash for: passs -->
+        <password>R2l5d0tqTldZM3NtejdET3hkWHRBT0dxcFF6U1owRFk=:100:1MMjPJ2uOzC4cXx2SHNNMFwN2wo95TQVqcEAK9a3sC+QoblK+6UEqR/TA9W3ZVYQpzcaGiE7FCse7RFumxFdBA==</password>
+        <roles>
+            <id>scoped-role</id>
+        </roles>
+    </user>
+</users>
+```
+
+You can find the roles available defined under `<roles>` in the same file. You can create your own roles if needed. To know more about adding users and roles refer to  the extension's [Credentials configuration](https://www.hivemq.com/extension/file-rbac-extension/#credentials-configuration) docs.
+
+#### Hashing passwords
+
+All passwords for broker users are hashed, you can switch to plain text passwords by editing `extension-config.xml` but it's not recommended. To get a password hash:
+
+- Start the `hive-mq` docker container, and get the container name
+- In the project root, run `sh ./hive-mq/bin/hash_pass.sh <container-name> <password-to-hash>`
+
+e.g. For a container with name `m3saas_hive-mq_1` and a password `passs`:
+
+```bash
+$ sh ./hive-mq/bin/hash_pass.sh m3saas_hive-mq_1 passs
+
+Add the following string as password to your credentials configuration file:
+----------------------------------------------------------------------------
+SXhuVzlpQ2tVUm5YVGZMVUJFaXZkbzZCV25UMnVKclQ=:100:8EaVMexR+jt45qicY35j7IDMpLeAkWQfS6uvXg2SsnX3+W09TMJaKJZy97wkvSaIkJZjCeAkCHb7G3qUxBZhWA==
+```
+
+### Connect the server to the broker
+
+To connect the server with the broker, you need to define your MQTT credentials inside `secrets/config.json.secret`:
+
+```json
+{
+    "mqtt": {
+        "host": "hive-mq",
+        "port": "1883",
+        "username": "xxx",
+        "password": "xxx"
+    }
+}
+```
+
+You should change the host and port according to your setup. If you don't want to use MQTT at all you can remove the `mqtt` property all together.
+
+### Publish messages from server
+
+The server should only publish messages to clients, If a client wants to publish a message to the server, it should use the exposed HTTP API by the server. To publish a message from the server to clients:
+
+- Get an instance from the MQTT client: `$client = MQTT_Client::instance();`
+- Publish your message using `$client->publish(string $topic, string $payload, int $qos = 0, bool $retain = false)`
+
+e.g.
+
+```php
+// Get an instance of the MQTT client
+$mqtt = MQTT_Client::instance();
+// Publish an unretained message to topic "hello/world" message "Hello from the server!" with QoS 0
+$mqtt->publish("hello/world", "Hello from the server!");
+```
+
 ## Config file fallback
 
-The app gets its config file path ferom environment varialbe `CONFIG_FILE` defined in `docker-compose`. If you are using the app outside docker or wants to add a fallback for the config file, Add your configuration to `config.json` inside the 'app' directory.
+The app gets its config file path ferom environment varialbe `CONFIG_FILE` defined in `docker-compose`, which points to `secrets/config.json.secret`. If you are using the app outside docker or wants to add a fallback for the config file, Add your configuration to `config.json` inside the 'app' directory.
 
 ## Future Features
 
