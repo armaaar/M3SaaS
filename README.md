@@ -106,6 +106,68 @@ In order to migrate changes in tables' structure and seeds. You can either:
 
 Note: renaming columns or tables might result DROPPING the column or table entirely. so be careful!
 
+## Cronjobs
+
+M3saas comes with dynamic cronjobs creation out of the box that modules can use to run functions daily, weekly, monthly or yearly.
+
+### Cronjobs setup
+
+If you are using docker, You don't need to do anything to use dynamically created cronjobs. However, if you are not using docker, you should add a single cronjob manually to your server that runs `app/bin/m3saas_cron.sh` daily. An example of such cronjob can be found in `app/m3saas_cronjob`.
+
+### Register a cronjob
+
+To add a cronjob a module:
+
+- Create a crobjob entry file for the module at `<module-name>/v<module-version>/<module-name>.cron.php`
+- Register a cron job using `register_crobjob` function with a uniqie name and closure
+
+Here is the `register_crobjob` function definition:
+
+```php
+register_crobjob(
+    string $job_name,
+    closure $job_fn,
+    string $repeat = 'day',
+    int $repeat_interval = 1,
+    int $day = null,
+    int $month = null
+);
+```
+
+Cron jobs can be repeated every `day`, `week`, `month` or `year`. Here are some examples:
+
+```php
+// Fire daily
+register_crobjob('daily_cronjob', function() {}, 'day');
+// Fire every 2 days
+register_crobjob('every_3_days_cronjob', function() {}, 'day', 2);
+
+// Fire weekly
+register_crobjob('every_3_days_cronjob', function() {}, 'week');
+// Fire every 6 weeks
+register_crobjob('every_3_days_cronjob', function() {}, 'week', 6);
+
+// Fire monthly
+register_crobjob('every_3_days_cronjob', function() {}, 'month');
+// Fire every 3 months
+register_crobjob('every_3_days_cronjob', function() {}, 'month', 3);
+// Fire every 3 months on day 1
+register_crobjob('every_3_days_cronjob', function() {}, 'month', 3, 1);
+// Fire monthly on day 15
+register_crobjob('every_3_days_cronjob', function() {}, 'month', 1, 15);
+
+// Fire yearly
+register_crobjob('every_3_days_cronjob', function() {}, 'year');
+// Fire every 5 years
+register_crobjob('every_3_days_cronjob', function() {}, 'year', 5);
+// Fire every 3 years on day 1 month 1
+register_crobjob('every_3_days_cronjob', function() {}, 'year', 3, 1, 1);
+// Fire yearly on day 1 month 7
+register_crobjob('every_3_days_cronjob', function() {}, 'year', 1, 1, 7);
+```
+
+Cronjobs intervals are calculated from the last time the job was fired. Cronjobs get fired once if they were never fired before unless you specify an exact day or month for it to be fired on. You can't specify a day for jobs repeated every `day` or `week`.
+
 ## MQTT Connection
 
 The app comes bundled with HiveMQ MQTT Broker so the server can push messages to clients and the clients can communicate directly outside the server. If you are new to MQTT, we recomment reading [MQTT Essentials](https://www.hivemq.com/mqtt-essentials/) first.
@@ -188,6 +250,7 @@ The app gets its config file path ferom environment varialbe `CONFIG_FILE` defin
 Bellow is a list of features or tasks to do in the future:
 
 - Manage modules dependancies
+- Disallow cronjobs to access all tanents data
 
 ## License
 
