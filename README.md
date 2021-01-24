@@ -38,7 +38,7 @@ Modules are pieces or reusable code that defines your business logic You can use
 
 To create a new module with name `unique_module_name`:
 
-- Create a new directory called `unique_module_name` under [`modules`](https://github.com/armaaar/M3SaaS/tree/master/modules) directory
+- Create a new directory called `unique_module_name` under `modules` directory
 - Create a new directory for each version of the module. Add directory `v1` in your newly created module directory. More on [module versionning](#modules-versionning) later
 - Create a root module file called `unique_module_name.module.php` inside each version directory. This file will be included for each tenant subscribed to this version of the module
 
@@ -78,14 +78,14 @@ The module version's APIs will be added under the unique URL: `/{tenant_id}/{uni
 
 ## Register modules in database
 
-Add modules' information as [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in [`modules.seed.php`](https://github.com/armaaar/M3SaaS/blob/master/tenants_db/seeds/modules.seed.php), each module with unique:
+Add modules' information as [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in `modules.seed.php`, each module with unique:
 
 - `id`: Will be used to connect tenants to modules
 - `name`: The same name used for the module's directory name in `modules`
 
 ## Subscribe tenants to modules
 
-For each module a tenant should subscribe to, add a [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in [`subscriptions.seed.php`](https://github.com/armaaar/M3SaaS/blob/master/tenants_db/seeds/subscriptions.seed.php) with:
+For each module a tenant should subscribe to, add a [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in `subscriptions.seed.php` with:
 
 - `id`: Just a unique identifier required for main seeds, not used
 - `tenant_id`: The id of the tenant that will subscribe to the module
@@ -105,6 +105,10 @@ In order to migrate changes in tables' structure and seeds. You can either:
   - To remove temporary seeds, send the request to `/migrate/deseed`
 
 Note: renaming columns or tables might result DROPPING the column or table entirely. so be careful!
+
+## Config file fallback
+
+The app gets its config file path ferom environment varialbe `CONFIG_FILE` defined in `docker-compose`. If you are using the app outside docker or wants to add a fallback for the config file, Add your configuration to `config.json` inside the 'app' directory.
 
 ## Future Features
 
