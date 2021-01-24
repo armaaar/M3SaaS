@@ -27,6 +27,21 @@ date_default_timezone_set(TIME_ZONE);
 // Import core functions
 require_once './core/functions.php';
 
+// Import MQTT Client
+require_once './core/mqtt_client.php';
+if (property_exists($configuration, 'mqtt')) {
+    if (property_exists($configuration->mqtt, 'username') && property_exists($configuration->mqtt, 'password')) {
+        MQTT_Client::instance(
+            $configuration->mqtt->host,
+            intval($configuration->mqtt->port),
+            $configuration->mqtt->username,
+            $configuration->mqtt->password
+        );
+    } else {
+        MQTT_Client::instance($configuration->mqtt->host, intval($configuration->mqtt->port));
+    }
+}
+
 // Import DBStalker
 require_once './core/dbstalker/dbstalker.php';
 Stalker_Configuration::set_stalker_configuration($configuration->tenants);
