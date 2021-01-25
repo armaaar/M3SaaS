@@ -1,3 +1,4 @@
+#!/bin/sh
 # Start logger
 service rsyslog start
 # Start cron service
