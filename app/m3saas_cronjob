@@ -7,4 +7,4 @@
 # |  |  |  |  |
 # *  *  *  *  *  command to be executed
 
-30 07 * * * sh /var/www/html/bin/m3saas_cron.sh
+30 7 * * * sh /var/www/html/bin/m3saas_cron.sh
