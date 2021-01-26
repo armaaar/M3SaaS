@@ -5,23 +5,33 @@ chdir(__DIR__);
 // initial settings
 require_once "./settings/ini.php";
 
+function get_configurations() {
+    static $configuration = null;
+
+    // Read configurations
+    if (!$configuration) {
+        $config_file_path = './config.json';
+        if (isset($_ENV['CONFIG_FILE'])) {
+            $config_file_path = $_ENV['CONFIG_FILE'];
+        }
+
+        if (!file_exists($config_file_path)) {
+            trigger_error("ERROR: Config file not defined", E_USER_WARNING);
+            die();
+        }
+
+        // load config.json
+        $configuration = json_decode(file_get_contents($config_file_path));
+        if(json_last_error()!==JSON_ERROR_NONE) {
+            error_log(json_last_error());
+            die();
+        }
+    }
+    return $configuration;
+}
+
 // Read configurations
-$config_file_path = './config.json';
-if (isset($_ENV['CONFIG_FILE'])) {
-    $config_file_path = $_ENV['CONFIG_FILE'];
-}
-
-if (!file_exists($config_file_path)) {
-    trigger_error("ERROR: Config file not defined", E_USER_WARNING);
-    die();
-}
-
-// load config.json
-$configuration = json_decode(file_get_contents($config_file_path));
-if(json_last_error()!==JSON_ERROR_NONE) {
-    error_log(json_last_error());
-    die();
-}
+$configuration = get_configurations();
 
 // define constants
 require_once "./settings/constants.php";
