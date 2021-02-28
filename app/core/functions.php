@@ -3,6 +3,9 @@
 function setMigrationRoute($router) {
     if (AUTO_MIGRATION) {
         Stalker_Migrator::migrate();
+        if (ALWAYS_FORCE_MAIN_SEEDS) {
+            Stalker_Seeder::delete_main_seeds();
+        }
         Stalker_Seeder::seed_main_seeds(ALWAYS_FORCE_MAIN_SEEDS);
     } else {
         $router->get('/migrate/{:a}?', function($seed=false) {
@@ -47,4 +50,10 @@ function salt_db_password($password, $salt = "") {
 
 function get_file_name($path) {
     return explode('.', end(explode('/', $path)))[0];
+}
+
+function var_dump_log($x) {
+    ob_start();
+    var_dump($x);
+    error_log(ob_get_clean());
 }

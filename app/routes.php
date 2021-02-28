@@ -53,6 +53,9 @@ $router->group(APP_SUB_DIRECTORY, function($router) use($configuration) {
 
             if ($is_new_database && !AUTO_MIGRATION) {
                 Stalker_Migrator::migrate();
+                if (ALWAYS_FORCE_MAIN_SEEDS) {
+                    Stalker_Seeder::delete_main_seeds();
+                }
                 Stalker_Seeder::seed_main_seeds(ALWAYS_FORCE_MAIN_SEEDS);
             }
 
