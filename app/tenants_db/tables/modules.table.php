@@ -13,7 +13,11 @@ class Modules extends Stalker_Table
     }
 
     public function dependency_modules() {
-        return $this->has_many_through("Modules", "Modules_Dependencies", "dependency_module_id", "module_id");
+        return array_map(function ($dependency) {
+            $dependency_module = $dependency->dependency_module;
+            $dependency_module->version = $dependency->version;
+            return $dependency_module;
+        }, $this->has_many('Modules_Dependencies', 'module_id'));
     }
 
     public function fetch_dependency_modules_recursively() {

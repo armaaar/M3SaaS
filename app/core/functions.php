@@ -43,6 +43,27 @@ function require_db_files($db_directory_path) {
     }
 }
 
+function load_module(Modules $module, Closure $on_load, bool $reset_loaded_modules = false) {
+    static $loaded_modules  = [];
+
+    if ($reset_loaded_modules) {
+        $loaded_modules  = [];
+    }
+
+
+    if (in_array($module->id, $loaded_modules)) return;
+
+    if ($module->dependency_modules) {
+        foreach ($module->dependency_modules as $dependency_module) {
+            load_module($dependency_module, $on_load);
+        }
+    }
+
+    call_user_func_array($on_load, [$module]);
+
+    $loaded_modules[] = $module->id;
+}
+
 function salt_db_password($password, $salt = "") {
     // using MD5 because MYSQL max password length is 32 characters
     return md5($salt . $password . $salt);

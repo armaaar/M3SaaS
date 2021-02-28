@@ -13,6 +13,10 @@ if ($tenants) {
     foreach ($tenants as $tenant) {
         // fetch tenant modules before changing db settings
         $modules = $tenant->modules;
+        // fetch dependecies recursively
+        foreach ($modules as $module) {
+            $module->fetch_dependency_modules_recursively();
+        }
 
         // Switch to tenant database
         Stalker_Registerar::clear_registerar();
@@ -39,15 +43,19 @@ if ($tenants) {
             Stalker_Backup::create_backup();
         }, 'month');
 
-        // Load modules settings and routes
+        // Load modules settings and jobs
+        $is_first_module = true;
         foreach ($modules as $module) {
-            if (file_exists("./modules/{$module->name}/v{$module->version}/{$module->name}.cron.php")) {
+            load_module($module, function($module) use(&$is_first_module) {
+                $is_first_module = false;
                 // Import any Database files
                 require_db_files("./modules/{$module->name}/v{$module->version}/db");
 
-                // set module route
-                include "./modules/{$module->name}/v{$module->version}/{$module->name}.cron.php";
-            }
+                if (file_exists("./modules/{$module->name}/v{$module->version}/{$module->name}.cron.php")) {
+                    // set module route
+                    include "./modules/{$module->name}/v{$module->version}/{$module->name}.cron.php";
+                }
+            }, $is_first_module);
         }
     }
 }

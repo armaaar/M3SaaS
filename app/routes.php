@@ -44,15 +44,17 @@ $router->group(APP_SUB_DIRECTORY, function($router) use($configuration) {
 
             // Load modules settings and routes
             foreach ($modules as $module) {
-                // Import any Database files
-                require_db_files("./modules/{$module->name}/v{$module->version}/db");
+                load_module($module, function($module) use($router, $tenant_id) {
+                    // Import any Database files
+                    require_db_files("./modules/{$module->name}/v{$module->version}/db");
 
-                // set module route
-                $router->group("/{$module->name}/v({$module->version}(?!\d)(?:\.\d+)*)",
-                    function($router, $tenant_id, $version_number) use($module) {
-                        include_once "./modules/{$module->name}/v{$module->version}/{$module->name}.module.php";
-                    }
-                );
+                    // set module route
+                    $router->group("/{$module->name}/v({$module->version}(?!\d)(?:\.\d+)*)",
+                        function($router, $tenant_id, $version_number) use($module) {
+                            include_once "./modules/{$module->name}/v{$module->version}/{$module->name}.module.php";
+                        }
+                    );
+                });
             }
 
             if ($is_new_database && !AUTO_MIGRATION) {
