@@ -5,7 +5,8 @@ RUN apt-get update \
     && apt-get install -y \
         rsyslog \
         cron \
-        libmosquitto-dev
+        libmosquitto-dev \
+        sudo
 # install apache mods
 RUN a2enmod rewrite && a2enmod headers && a2enmod expires && a2enmod deflate
 # Install php extensions
