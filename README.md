@@ -83,6 +83,23 @@ Add modules' information as [main seeds](https://github.com/armaaar/dbstalker#ma
 - `id`: Will be used to connect tenants to modules
 - `name`: The same name used for the module's directory name in `modules`
 
+## Modules dependancies
+
+Some modules might depend on other modules. For each module dependancy, add a [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in `modules_dependencies.seed.php` with:
+
+- `id`: Just a unique identifier required for main seeds, not used
+- `module_id` The id of the original module that you need to define a dependancy to
+- `dependency_module_id`: The id of the module it depends on
+- `version` The major version number of the module module it depends on, default to `1`
+
+**BE CAREFUL!!** Since modules won't load until all of their dependancies are loaded, If 2 (or more) modules shouldn't depend on each other as this might cause an infinite loop!
+
+e.g. if module 1 depends on module 2 and module 2 depends on module 1. If you try to load module 1 this loading sequence would happed: 1 -> 2 -> 1 -> 2 -> 1 -> 2 -> 1 -> ... causing an infinite loop!
+
+Also this kind of 'dependancy loop' might happen for more than 2 modules.
+
+e.g. if module 1 depends on module 2, module 2 depends on module 3 and module 3 depends on module 1. If you try to load module 1 this loading sequence would happed: 1 -> 2 -> 3 -> 1 -> 2 -> 3 -> 1 -> 2 -> ... causing an infinite loop!
+
 ## Subscribe tenants to modules
 
 For each module a tenant should subscribe to, add a [main seeds](https://github.com/armaaar/dbstalker#main-seeds) in `subscriptions.seed.php` with:
