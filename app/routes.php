@@ -17,6 +17,10 @@ $router->group(APP_SUB_DIRECTORY, function($router) use($configuration) {
 
             // fetch tenant modules before changing db settings
             $modules = $tenant->modules;
+            // fetch dependecies recursively
+            foreach ($modules as $module) {
+                $module->fetch_dependency_modules_recursively();
+            }
 
             // Switch to tenant database
             Stalker_Registerar::clear_registerar();
