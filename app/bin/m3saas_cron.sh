@@ -1,6 +1,9 @@
 #!/bin/sh
 
-. $HOME/.cron_profile
+FILE="$HOME/.cron_profile"
+if test -f $FILE; then
+    . $HOME/.cron_profile
+fi
 
 output=`CRON_JOBS=true /usr/local/bin/php -f /var/www/html/index.php`
 if [ $? -eq 0 ]; then
